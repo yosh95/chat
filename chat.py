@@ -96,6 +96,8 @@ class Chat():
                 print(json.dumps(list(self.conversation),
                                  indent=2, ensure_ascii=False))
                 continue
+            if user_input in ['.q', '.quit']:
+                break
 
             if user_input == '':
                 continue
