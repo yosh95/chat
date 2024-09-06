@@ -180,9 +180,10 @@ class Chat():
                 if kind and kind.extension == 'pdf':
                     if PDF_AS_IMAGE is True:
                         content = self.encode_data_from_file(source)
+                        content_type = "application/pdf"
                     else:
                         content = self.read_pdf_from_file(source)
-                    content_type = kind.mime
+                        content_type = "text/plain"
                 elif kind and 'image/' in kind.mime:
                     content = self.encode_data_from_file(source)
                     content_type = kind.mime
