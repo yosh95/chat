@@ -64,7 +64,7 @@ class GPT(chat.Chat):
             response = requests.post(API_URL,
                                      headers=headers,
                                      data=json.dumps(data),
-                                     timeout=(5.0, 30.0))
+                                     timeout=(10.0, 10.0))
 
             self.write_request_debug_log(headers, data, response)
 

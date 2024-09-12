@@ -140,7 +140,7 @@ class Chat():
         try:
             response = requests.get(url,
                                     headers=headers,
-                                    timeout=(5.0, 5.0))
+                                    timeout=(10.0, 10.0))
             response.raise_for_status()
         except Exception as e:
             print(e)

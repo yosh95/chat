@@ -87,7 +87,7 @@ def search(search_term):
     while True:
 
         url = base_url + f"&start={startIndex}"
-        response = requests.get(url, headers=headers, timeout=(5.0, 5.0))
+        response = requests.get(url, headers=headers, timeout=(10.0, 10.0))
 
         search_results = {}
         if response.status_code == 200:
