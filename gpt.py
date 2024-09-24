@@ -8,7 +8,6 @@ import requests
 API_KEY = os.getenv("OPENAI_API_KEY", "")
 API_URL = 'https://api.openai.com/v1/chat/completions'
 MODEL = os.getenv("GPT_MODEL", "gpt-4o")
-SYSTEM_PROMPT = os.getenv("SYSTEM_PROMPT", None)
 
 
 class GPT(chat.Chat):
@@ -54,10 +53,6 @@ class GPT(chat.Chat):
                 'model': MODEL,
                 'messages': messages,
             }
-
-            if SYSTEM_PROMPT is not None:
-                system_message = {"role": "system", "content": SYSTEM_PROMPT}
-                messages.append(system_message)
 
             content = ''
 

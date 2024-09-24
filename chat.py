@@ -27,7 +27,6 @@ INPUT_HISTORY = os.getenv(
 REQUEST_DEBUG_LOG = os.getenv(
         "REQUEST_DEBUG_LOG",
         f"{os.path.expanduser('~')}/.chat_request_debug_log")
-SYSTEM_PROMPT = os.getenv("SYSTEM_PROMPT", None)
 USER_AGENT = os.getenv("USER_AGENT", "LLM_Chat_Tool")
 PDF_AS_IMAGE = False
 

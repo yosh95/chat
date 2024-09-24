@@ -9,7 +9,6 @@ MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-pro-latest")
 API_KEY = os.getenv("GEMINI_API_KEY", "")
 API_URL = "https://generativelanguage.googleapis.com/v1beta/models/" \
            + MODEL + ":generateContent?key=" + API_KEY
-SYSTEM_PROMPT = os.getenv("SYSTEM_PROMPT", None)
 SAFETY_SETTING = os.getenv("GEMINI_SAFETY_SETTING",
                            "HARM_BLOCK_THRESHOLD_UNSPECIFIED")
 
@@ -53,13 +52,6 @@ class Gemini(chat.Chat):
             data = {
                 'contents': messages
             }
-
-            if SYSTEM_PROMPT is not None:
-                data['system_instruction'] = {
-                    'parts': [{
-                        'text': SYSTEM_PROMPT
-                    }]
-                }
 
             data['safety_settings'] = [
                 {
