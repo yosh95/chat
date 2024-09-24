@@ -58,8 +58,7 @@ class O1(chat.Chat):
 
             response = requests.post(API_URL,
                                      headers=headers,
-                                     data=json.dumps(data),
-                                     timeout=(30.0, 30.0))
+                                     data=json.dumps(data))
 
             self.write_request_debug_log(headers, data, response)
 
