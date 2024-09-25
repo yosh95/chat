@@ -170,9 +170,11 @@ class Chat():
 
     def process_sources(self, sources):
         data = []
+        direct_prompt = True
         for source in sources:
             if source.startswith("http"):
                 content, content_type = self.fetch_url_content(source)
+                direct_prompt = False
             elif os.path.exists(source):
                 content_type = None
                 kind = filetype.guess(source)
@@ -188,6 +190,7 @@ class Chat():
                     content_type = kind.mime
                 else:
                     content = self.read_text_from_file(source)
+                direct_prompt = False
             else:
                 content = source
                 content_type = "text/plain"
@@ -198,7 +201,11 @@ class Chat():
                     "content_type": content_type
                 })
 
-        self.talk(data)
+        if direct_prompt == True:
+            self.send_and_print(data)
+            self.talk(None)
+        else:
+            self.talk(data)
 
     def write_request_debug_log(self, headers, data, response):
         with open(REQUEST_DEBUG_LOG, 'w', encoding='utf-8') as file:
@@ -244,15 +251,11 @@ class Chat():
             PDF_AS_IMAGE = True
 
         if sys.stdin.isatty():
-            if args.sources is None:
+            if args.sources is None or len(args.sources) == 0:
                 self.talk(None)
             else:
                 self.process_sources(args.sources)
         else:
-            if args.sources is not None:
-                msg = "Warning: In the case of pipe processing, "
-                msg += "arguments excluding options will be ignored."
-                print(msg)
             stdin_input = sys.stdin.read()
             message = f"{stdin_input}"
             data = self.append_to_data(None, message)
