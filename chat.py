@@ -42,6 +42,8 @@ class Chat():
 
     conversation = deque()
 
+    args_sources = None
+
     def __init__(self, model):
         self.MODEL = model
 
@@ -72,7 +74,7 @@ class Chat():
         response, self.last_usage = self._send(data, self.conversation)
         print(f"({self.MODEL}):\n{response}")
 
-    def talk(self, data):
+    def talk(self, data, sources=None):
 
         if data is None:
             data = []
@@ -108,9 +110,9 @@ class Chat():
                 continue
             if user_input in ['.i', '.info']:
                 print(f"model: {self.MODEL}")
-                print(f"args: {sys.argv}")
+                print(f"sources: {sources}")
                 size = self.calc_data_size(data)
-                print(f"size: {size}")
+                print(f"data size: {size}")
                 continue
             if user_input in ['.q', '.quit']:
                 break
@@ -220,9 +222,9 @@ class Chat():
 
         if direct_prompt == True:
             self.send_and_print(data)
-            self.talk(None)
+            self.talk(None, sources=sources)
         else:
-            self.talk(data)
+            self.talk(data, sources=sources)
 
     def write_request_debug_log(self, headers, data, response):
         with open(REQUEST_DEBUG_LOG, 'w', encoding='utf-8') as file:
