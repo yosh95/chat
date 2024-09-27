@@ -60,6 +60,14 @@ class Chat():
         })
         return data
 
+    def calc_data_size(self, data):
+        sum = 0
+        if data is None:
+            return 0
+        for i in data:
+            sum += len(i['content'])
+        return sum
+
     def send_and_print(self, data):
         response, self.last_usage = self._send(data, self.conversation)
         print(f"({self.MODEL}):\n{response}")
@@ -91,9 +99,18 @@ class Chat():
                 break
 
             # special commands
+            if user_input in ['.c', '.clear']:
+                self.conversation.clear()
+                continue
             if user_input in ['.h', '.hist', '.history']:
                 print(json.dumps(list(self.conversation),
                                  indent=2, ensure_ascii=False))
+                continue
+            if user_input in ['.i', '.info']:
+                print(f"model: {self.MODEL}")
+                print(f"args: {sys.argv}")
+                size = self.calc_data_size(data)
+                print(f"size: {size}")
                 continue
             if user_input in ['.q', '.quit']:
                 break
