@@ -57,6 +57,7 @@ def select_list(title, explanation, items, default):
     bindings.add("right")(focus_next)
     bindings.add("left")(focus_previous)
     bindings.add("c-d")(lambda event: event.app.exit())
+    bindings.add("c-delete")(lambda event: event.app.exit())
 
     return Application(
         layout=Layout(dialog),

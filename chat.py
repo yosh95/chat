@@ -47,6 +47,10 @@ class Chat():
     def __init__(self, model):
         self.MODEL = model
 
+    @kb.add('c-delete')
+    def _(event):
+        raise KeyboardInterrupt
+
     @kb.add('c-j')
     def _(event):
         event.current_buffer.insert_text('\n')
