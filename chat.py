@@ -97,7 +97,8 @@ class Chat():
                                     enable_suspend=True,
                                     enable_system_prompt=True,
                                     enable_open_in_editor=True)
-                print("----")
+                if user_input != '':
+                    print("----")
                 user_input = user_input.strip()
             except UnicodeDecodeError as e:
                 print(e)
