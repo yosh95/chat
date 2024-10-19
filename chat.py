@@ -132,7 +132,7 @@ class Chat():
                     url = sources[0]
                     match = re.match(r"^(https?://)", url)
                     if match:
-                        print(f"{url} is going to be opened.")
+                        print(f"{url}")
                         webbrowser.open(sources[0])
                     else:
                         print("Only URLs starting with http:// or https:// "
