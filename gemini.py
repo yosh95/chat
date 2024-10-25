@@ -5,12 +5,16 @@ import json
 import os
 import requests
 
-MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-pro-latest")
-API_KEY = os.getenv("GEMINI_API_KEY", "")
+API_KEY = os.getenv("GEMINI_API_KEY")
+if API_KEY is None:
+    print("GEMINI_API_KEY environment variable must be set.")
+    exit(1)
+MODEL = os.getenv("GEMINI_MODEL")
+if MODEL is None:
+    print("GEMINI_MODEL environment variable must be set.")
+    exit(1)
 API_URL = "https://generativelanguage.googleapis.com/v1beta/models/" \
            + MODEL + ":generateContent?key=" + API_KEY
-SAFETY_SETTING = os.getenv("GEMINI_SAFETY_SETTING",
-                           "HARM_BLOCK_THRESHOLD_UNSPECIFIED")
 
 
 class Gemini(chat.Chat):
@@ -52,25 +56,6 @@ class Gemini(chat.Chat):
             data = {
                 'contents': messages
             }
-
-            data['safety_settings'] = [
-                {
-                    "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                    "threshold": SAFETY_SETTING
-                },
-                {
-                    "category": "HARM_CATEGORY_HATE_SPEECH",
-                    "threshold": SAFETY_SETTING
-                },
-                {
-                    "category": "HARM_CATEGORY_HARASSMENT",
-                    "threshold": SAFETY_SETTING
-                },
-                {
-                    "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-                    "threshold": SAFETY_SETTING
-                }
-            ]
 
             response = requests.post(API_URL,
                                      headers=headers,

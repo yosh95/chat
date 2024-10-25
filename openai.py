@@ -5,12 +5,18 @@ import json
 import os
 import requests
 
-API_KEY = os.getenv("OPENAI_API_KEY", "")
+API_KEY = os.getenv("OPENAI_API_KEY")
+if API_KEY is None:
+    print("OPENAI_API_KEY environment variable must be set.")
+    exit(1)
+MODEL = os.getenv("OPENAI_MODEL")
+if MODEL is None:
+    print("OPENAI_MODEL environment variable must be set.")
+    exit(1)
 API_URL = 'https://api.openai.com/v1/chat/completions'
-MODEL = os.getenv("O1_MODEL", "o1-preview")
 
 
-class O1(chat.Chat):
+class OPENAI(chat.Chat):
 
     def _send(self, data, conversation):
 
@@ -82,5 +88,5 @@ class O1(chat.Chat):
 
 
 if __name__ == "__main__":
-    o1 = O1(MODEL)
-    o1.main()
+    openai = OPENAI(MODEL)
+    openai.main()

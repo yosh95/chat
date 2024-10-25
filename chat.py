@@ -29,7 +29,6 @@ INPUT_HISTORY = os.getenv(
 REQUEST_DEBUG_LOG = os.getenv(
         "REQUEST_DEBUG_LOG",
         f"{os.path.expanduser('~')}/.chat_request_debug_log")
-USER_AGENT = os.getenv("USER_AGENT", "LLM_Chat_Tool")
 PDF_AS_IMAGE = False
 
 # prompt_toolkit
@@ -177,7 +176,6 @@ class Chat():
 
     def fetch_url_content(self, url):
         headers = {}
-        headers['User-Agent'] = USER_AGENT
         try:
             response = requests.get(url,
                                     headers=headers,
@@ -243,7 +241,7 @@ class Chat():
                     "content_type": content_type
                 })
 
-        if direct_prompt == True:
+        if direct_prompt is True:
             self.send_and_print(data)
             self.talk(None, sources=sources)
         else:

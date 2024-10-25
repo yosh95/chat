@@ -18,16 +18,25 @@ from prompt_toolkit.widgets import Button, Dialog, Label, RadioList
 
 load_dotenv()
 
-USER_AGENT = os.getenv("USER_AGENT", None)
-API_KEY = os.getenv("GOOGLE_API_KEY", None)
+API_KEY = os.getenv("GOOGLE_API_KEY")
+if API_KEY is None:
+    print("GOOGLE_API_KEY environment variable must be set.")
+    exit(1)
 CSE_ID = os.getenv("GOOGLE_CSE_ID", None)
-HELPER_CLASS = os.getenv("SEARCH_HELPER", "gemini")
-if HELPER_CLASS == "gemini":
+if CSE_ID is None:
+    print("GOOGLE_CSE_ID environment variable must be set.")
+    exit(1)
+HELPER_CLASS = os.getenv("SEARCH_HELPER")
+if HELPER_CLASS is None:
+    print("SEARCH_HELPER environment variable must be set.")
+    exit(1)
+
+if HELPER_CLASS == "openai":
+    import openai
+    search_helper = openai.OPENAI(os.getenv("OPENAI_MODEL"))
+else:
     import gemini
     search_helper = gemini.Gemini(os.getenv("GEMINI_MODEL"))
-else:
-    import gpt
-    search_helper = gpt.GPT(os.getenv("GPT_MODEL"))
 
 
 def select_list(title, explanation, items, default):
@@ -80,8 +89,6 @@ def search(search_term):
         + f"key={API_KEY}&cx={CSE_ID}&{encoded}"
 
     headers = {}
-    if USER_AGENT is not None:
-        headers['User-Agent'] = USER_AGENT
 
     startIndex = 0
 
