@@ -43,8 +43,6 @@ class Chat():
 
     conversation = deque()
 
-    args_sources = None
-
     def __init__(self, model):
         self.MODEL = model
 
@@ -55,6 +53,10 @@ class Chat():
     @kb.add('c-j')
     def _(event):
         event.current_buffer.insert_text('\n')
+
+    def clear(self):
+        self.last_usage = None
+        self.conversation.clear()
 
     def append_to_data(self, data, content, content_type=None):
         if data is None:
