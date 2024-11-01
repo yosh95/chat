@@ -16,7 +16,6 @@ if MODEL is None:
 API_URL = "https://generativelanguage.googleapis.com/v1beta/models/" \
            + MODEL + ":generateContent?key=" + API_KEY
 
-
 class Gemini(chat.Chat):
 
     def _send(self, data, conversation):
@@ -56,6 +55,8 @@ class Gemini(chat.Chat):
             data = {
                 'contents': messages
             }
+            if self.grounding is True:
+                data['tools'] = {'google_search_retrieval':{}}
 
             response = requests.post(API_URL,
                                      headers=headers,

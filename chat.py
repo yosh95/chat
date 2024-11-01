@@ -41,6 +41,8 @@ class Chat():
 
     last_usage = None
 
+    grounding = False
+
     conversation = deque()
 
     def __init__(self, model):
@@ -286,11 +288,17 @@ class Chat():
                             '--pdf-as-image',
                             action='store_true',
                             help="Read pdf as image.")
+        parser.add_argument('-g',
+                            '--grounding',
+                            action='store_true',
+                            help="Use grounding.")
         args = parser.parse_args()
 
         if args.pdf_as_image is True:
             global PDF_AS_IMAGE
             PDF_AS_IMAGE = True
+
+        self.grounding = args.grounding
 
         if sys.stdin.isatty():
             if args.sources is None or len(args.sources) == 0:
