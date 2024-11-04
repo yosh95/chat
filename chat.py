@@ -125,6 +125,7 @@ class Chat():
             if user_input in ['.i', '.info']:
                 print(f"model: {self.MODEL}")
                 print(f"sources: {sources}")
+                print(f"grounding: {self.grounding}")
                 print(f"passed data size: {data_size}")
                 print(f"last usage: {self.last_usage}")
                 continue
@@ -142,6 +143,14 @@ class Chat():
                               + "can be processed.")
                 else:
                     print("URL is not specified as an argument.")
+                continue
+            if user_input in ['.g', '.grounding']:
+                if self.grounding is True:
+                    self.grounding = False
+                    print("Grounding is set to False.")
+                else:
+                    self.grounding = True
+                    print("Grounding is set to True.")
                 continue
             if user_input == '':
                 continue
