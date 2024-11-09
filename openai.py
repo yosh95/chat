@@ -48,6 +48,8 @@ class OPENAI(chat.Chat):
                 })
 
         messages.append(user_message)
+        if conversation is not None:
+            conversation.append(user_message)
 
         try:
             headers = {
@@ -77,8 +79,8 @@ class OPENAI(chat.Chat):
             usage = result['usage']
 
             model_message = {"role": "assistant", "content": content}
+
             if conversation is not None:
-                conversation.append(user_message)
                 conversation.append(model_message)
 
         except Exception as e:

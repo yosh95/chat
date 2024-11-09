@@ -45,6 +45,8 @@ class Gemini(chat.Chat):
                 })
 
         messages.append(user_message)
+        if conversation is not None:
+            conversation.append(user_message)
 
         content = ''
         try:
@@ -83,7 +85,6 @@ class Gemini(chat.Chat):
             usage = result['usageMetadata']
 
             if conversation is not None:
-                conversation.append(user_message)
                 conversation.append(model_message)
 
         except Exception as e:
