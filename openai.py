@@ -64,6 +64,8 @@ class OPENAI(chat.Chat):
 
             content = ''
 
+            grounding_results = None
+
             response = requests.post(API_URL,
                                      headers=headers,
                                      data=json.dumps(data))
@@ -85,8 +87,8 @@ class OPENAI(chat.Chat):
 
         except Exception as e:
             print(e)
-            return None, None
-        return content, usage
+            return None, None, None
+        return content, usage, grounding_results
 
 
 if __name__ == "__main__":

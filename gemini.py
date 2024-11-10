@@ -49,6 +49,7 @@ class Gemini(chat.Chat):
             conversation.append(user_message)
 
         content = ''
+        grounding_results = None
         try:
             headers = {
                 'Content-Type': 'application/json',
@@ -77,6 +78,11 @@ class Gemini(chat.Chat):
                 if content.startswith("'content'"):
                     print(content)
                 model_message = {"role": "model", "parts": [{"text": content}]}
+
+                if 'groundingMetadata' in result['candidates'][0]:
+                    metadata = result['candidates'][0]['groundingMetadata']
+                    grounding_results = metadata['groundingChunks']
+
             else:
                 content = "ERROR: Failed to get contents in the response. " \
                      + f"Reason: {result['candidates'][0]['finishReason']}"
@@ -89,8 +95,8 @@ class Gemini(chat.Chat):
 
         except Exception as e:
             print(e)
-            return None, None
-        return content, usage
+            return None, None, None
+        return content, usage, grounding_results
 
 
 # CLI Interface

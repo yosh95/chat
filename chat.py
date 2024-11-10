@@ -43,6 +43,8 @@ class Chat():
 
     grounding = False
 
+    grounding_results = None
+
     conversation = deque()
 
     def __init__(self, model):
@@ -58,6 +60,7 @@ class Chat():
 
     def clear(self):
         self.last_usage = None
+        self.grounding_results = None
         self.conversation.clear()
 
     def append_to_data(self, data, content, content_type=None):
@@ -80,7 +83,8 @@ class Chat():
         return sum
 
     def send_and_print(self, data):
-        response, self.last_usage = self._send(data, self.conversation)
+        response, self.last_usage, self.grounding_results = \
+            self._send(data, self.conversation)
         print(f"({self.MODEL}):\n{response}")
 
     def talk(self, data, sources=None):
@@ -127,7 +131,12 @@ class Chat():
                 print(f"sources: {sources}")
                 print(f"grounding: {self.grounding}")
                 print(f"passed data size: {data_size}")
-                print(f"last usage: {self.last_usage}")
+                print(f"last usage: ", end="")
+                print(json.dumps(self.last_usage,
+                                 indent=2, ensure_ascii=False))
+                print(f"grounding results: ", end="")
+                print(json.dumps(self.grounding_results,
+                                 indent=2, ensure_ascii=False))
                 continue
             if user_input in ['.q', '.quit']:
                 break
