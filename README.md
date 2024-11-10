@@ -1,55 +1,59 @@
-# LLM Chat Tool
+# LLM Chat Client with Web Search Integration
 
-This repository contains a command-line tool for interacting with Large Language Models (LLMs) like
-Google Gemini and OpenAI.  It allows you to have conversations, provide prompts from various sources
- (URLs, files, or direct input), and manage conversation history. It also includes a web search util
-ity to augment your prompts with information from Google Custom Search.
+This project provides a command-line interface (CLI) chat client that interacts with various Large Language Models (LLMs) and integrates with Google Custom Search to enhance the conversation experience.  It supports OpenAI and Google Gemini APIs.
 
 ## Features
 
-* **Multi-LLM Support:** Currently supports Google Gemini and OpenAI.  Easily extensible to other LL
-Ms.
-* **Versatile Input:**  Accept prompts from direct input, files (text, PDF, images), and URLs (web p
-ages, PDFs, images).
-* **Conversation History:**  Maintain and manage conversation history for context-rich interactions.
+* **Multi-LLM Support:**  Currently supports OpenAI and Google Gemini APIs.  Switching between models is done by setting environment variables.
+* **File and URL Input:**  Allows providing input from various sources, including local files (text, PDF, images), and URLs.  PDFs can be processed as text or images (depending on settings).
+* **Interactive Chat:**  Provides a conversational interface for interacting with the chosen LLM.
+* **Conversation History:**  Maintains and displays a history of the conversation.
+* **Command-line Controls:**  Offers commands to clear the conversation history, view information about the session, quit, and open URLs in a web browser.
+* **Google Custom Search Integration:** Integrates with Google Custom Search to allow for context-aware web searches during the chat session. This helps the LLM access relevant external information.
+* **Grounding (Gemini only):**  The Gemini integration allows the use of grounding, enabling the model to retrieve information from Google Search to answer your queries more accurately.  This is optional and controlled by an environment variable or command-line option.
+* **Request Logging:** Logs requests and responses to a file for debugging purposes.  This helps troubleshoot issues with API calls.
 
-* **Special Commands:** Clear history, view history, display information, and quit the application.
-* **Web Search Integration:** Search the web using Google Custom Search and directly use search resu
-lts as input for the LLM.
-* **Interactive Prompting:**  Uses `prompt_toolkit` for a user-friendly command-line experience with
- features like history, auto-completion, and keyboard shortcuts.
-* **PDF Handling:** Extracts text from PDFs for use in prompts. Optionally treat PDFs as images.
-* **Image Support:**  Encode images as base64 for use with compatible LLMs (e.g., OpenAI).
-* **Request Debugging:**  Logs request and response details for troubleshooting.
+## Requirements
 
+* Python 3.7+
+* `requests`
+* `filetype`
+* `beautifulsoup4`
+* `pypdf`
+* `dotenv`
+* `prompt_toolkit`
+* `google-api-python-client` (for Google Custom Search)
 
-## Installation
+Install the necessary packages using pip:
 
-1. **Clone the repository:**
+```bash
+pip install -r requirements.txt
+```
+
+## Setup
+
+1. **API Keys:** Obtain API keys for OpenAI and/or Google Gemini.
+
+2. **Environment Variables:** Set the following environment variables (replace with your actual keys and settings):
+
+   Or create a `.env` file in the project root directory and add the following API keys and settings:
+
    ```bash
-   git clone https://github.com/yosh95/chat.git
-   cd chat
+   export OPENAI_API_KEY="your_openai_api_key"
+   export OPENAI_MODEL="gpt-3.5-turbo"  # or another suitable OpenAI model
+   export GEMINI_API_KEY="your_gemini_api_key"
+   export GEMINI_MODEL="models/text-bison-001" # or another suitable Gemini model
+   export GOOGLE_API_KEY="your_google_custom_search_api_key"
+   export GOOGLE_CSE_ID="your_google_custom_search_engine_id"
+   export SEARCH_HELPER="openai" # or "gemini"
+   export PROMPT_HISTORY="$HOME/.chat_prompt_history"
+   export REQUEST_DEBUG_LOG="$HOME/.chat_request_debug_log"
    ```
 
-2. **Install dependencies:**
+3. **Run:** Execute the main script (you'll likely want to run `google_search.py`):
+
    ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Set up environment variables:**
-   Create a `.env` file in the project root directory and add the following API keys and settings:
-
-   ```
-   OPENAI_API_KEY=<your_openai_api_key>
-   OPENAI_MODEL=<your_openai_model_name>  # e.g., gpt-3.5-turbo, gpt-4
-
-   GEMINI_API_KEY=<your_gemini_api_key>
-   GEMINI_MODEL=<your_gemini_model_name> # e.g., chat-bison-001
-
-   GOOGLE_API_KEY=<your_google_custom_search_api_key>
-   GOOGLE_CSE_ID=<your_google_custom_search_engine_id>
-
-   SEARCH_HELPER=openai  # or gemini, depending on which LLM you want to use for search assistance.
+   python3 google_search.py "your search query"
    ```
 
 ## Usage
@@ -110,19 +114,15 @@ helper LLM.
 
 ## Extending to Other LLMs
 
-To add support for another LLM, create a new Python file (e.g., `new_llm.py`) and create a class tha
-t inherits from `chat.Chat`.  Implement the `_send()` method to handle sending requests and receivin
-g responses from the new LLM's API.  Update the `.env` file with the necessary API keys and model na
-mes.
+To add support for another LLM, create a new Python file (e.g., `new_llm.py`) and create a class that inherits from `chat.Chat`.  Implement the `_send()` method to handle sending requests and receiving responses from the new LLM's API.  Update the `.env` file with the necessary API keys and model names.
 
 
 ## Contributing
 
-Contributions are welcome!  Please open an issue or submit a pull request if you have any suggestion
-s or improvements.
+Contributions are welcome!  Please open an issue or submit a pull request if you have any suggestions or improvements.
 
 
 ## License
 
-This project is licensed under the MIT License.  See the [LICENSE](LICENSE) file for details.
+MIT license
 
