@@ -129,11 +129,11 @@ class Chat():
             if user_input in ['.i', '.info']:
                 print(f"model: {self.MODEL}")
                 print(f"sources: {sources}")
-                print(f"grounding: {self.grounding}")
                 print(f"passed data size: {data_size}")
                 print(f"last usage: ", end="")
                 print(json.dumps(self.last_usage,
                                  indent=2, ensure_ascii=False))
+                print(f"grounding: {self.grounding}")
                 print(f"grounding results: ", end="")
                 print(json.dumps(self.grounding_results,
                                  indent=2, ensure_ascii=False))
