@@ -81,7 +81,8 @@ class Gemini(chat.Chat):
 
                 if 'groundingMetadata' in result['candidates'][0]:
                     metadata = result['candidates'][0]['groundingMetadata']
-                    grounding_results = metadata['groundingChunks']
+                    if 'groundingChunks' in metadata:
+                        grounding_results = metadata['groundingChunks']
 
             else:
                 content = "ERROR: Failed to get contents in the response. " \
