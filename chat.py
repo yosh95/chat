@@ -15,6 +15,7 @@ from collections import deque
 from dotenv import load_dotenv
 from io import BytesIO
 from prompt_toolkit.history import FileHistory
+from prompt_toolkit.history import InMemoryHistory
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.shortcuts import prompt
 from pypdf import PdfReader
@@ -23,12 +24,8 @@ from pypdf import PdfReader
 load_dotenv()
 
 # Constants
-INPUT_HISTORY = os.getenv(
-        "PROMPT_HISTORY",
-        f"{os.path.expanduser('~')}/.chat_prompt_history")
-REQUEST_DEBUG_LOG = os.getenv(
-        "REQUEST_DEBUG_LOG",
-        f"{os.path.expanduser('~')}/.chat_request_debug_log")
+INPUT_HISTORY = os.getenv("PROMPT_HISTORY", None)
+REQUEST_DEBUG_LOG = os.getenv("REQUEST_DEBUG_LOG", None)
 PDF_AS_IMAGE = False
 
 # prompt_toolkit
@@ -94,7 +91,10 @@ class Chat():
 
         data_size = self.calc_data_size(data)
 
-        prompt_history = FileHistory(INPUT_HISTORY)
+        if INPUT_HISTORY is None:
+            prompt_history = InMemoryHistory()
+        else:
+            prompt_history = FileHistory(INPUT_HISTORY)
 
         while True:
 
@@ -270,6 +270,9 @@ class Chat():
             self.talk(data, sources=sources)
 
     def write_request_debug_log(self, headers, data, response):
+        if REQUEST_DEBUG_LOG is None:
+            return
+
         with open(REQUEST_DEBUG_LOG, 'w', encoding='utf-8') as file:
             file.write('--- (request) ---\n')
             file.write(
