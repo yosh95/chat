@@ -42,6 +42,8 @@ class Chat():
 
     grounding_results = None
 
+    stdout = False
+
     conversation = deque()
 
     def __init__(self, model):
@@ -265,9 +267,13 @@ class Chat():
 
         if direct_prompt is True:
             self.send_and_print(data)
-            self.talk(None, sources=sources)
+            if self.stdout is False:
+                self.talk(None, sources=sources)
         else:
-            self.talk(data, sources=sources)
+            if self.stdout is False:
+                self.talk(data, sources=sources)
+            else:
+                self.send_and_print(data)
 
     def write_request_debug_log(self, headers, data, response):
         if REQUEST_DEBUG_LOG is None:
@@ -313,6 +319,10 @@ class Chat():
                             '--grounding',
                             action='store_true',
                             help="Use grounding.")
+        parser.add_argument('-s',
+                            '--stdout',
+                            action='store_true',
+                            help="Redirect the output to STDOUT.")
         args = parser.parse_args()
 
         if args.pdf_as_image is True:
@@ -320,6 +330,8 @@ class Chat():
             PDF_AS_IMAGE = True
 
         self.grounding = args.grounding
+
+        self.stdout = args.stdout
 
         if sys.stdin.isatty():
             if args.sources is None or len(args.sources) == 0:
