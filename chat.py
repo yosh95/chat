@@ -46,7 +46,7 @@ class Chat():
 
     stdout = False
 
-    conversation = None
+    conversation = deque()
 
     def __init__(self, model):
         self.MODEL = model
@@ -360,14 +360,10 @@ class Chat():
 
         self.stdout = args.stdout
 
-        if args.hist is None:
-            self.conversation = deque()
-        else:
+        if args.hist is not None:
             self.chat_history_file = args.hist
             hist = self.json_to_deque(self.chat_history_file)
-            if hist is None:
-                self.conversation = deque()
-            else:
+            if hist is not None:
                 self.conversation = hist
 
         if sys.stdin.isatty():
