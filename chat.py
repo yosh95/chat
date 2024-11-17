@@ -36,6 +36,8 @@ class Chat():
 
     MODEL = ""
 
+    chat_history_file = None
+
     last_usage = None
 
     grounding = False
@@ -44,7 +46,7 @@ class Chat():
 
     stdout = False
 
-    conversation = deque()
+    conversation = None
 
     def __init__(self, model):
         self.MODEL = model
@@ -169,6 +171,9 @@ class Chat():
                 data = self.append_to_data(data, user_input)
                 self.send_and_print(data)
             data = []
+
+        if self.chat_history_file is not None:
+            self.deque_to_json(self.conversation, self.chat_history_file)
 
     def encode_data_from_file(self, file_path):
         with open(file_path, "rb") as data:
@@ -298,6 +303,25 @@ class Chat():
                 + f"{json.dumps(json_str, ensure_ascii=False, indent=2)}\n")
             file.write('\n')
 
+    def deque_to_json(self, deque_obj, filepath):
+        try:
+            with open(filepath, 'w+', encoding='utf-8') as f:
+                json.dump(list(deque_obj), f, indent=2, ensure_ascii=False)
+        except (IOError, TypeError) as e:
+            print(f"Error: Failed to save json. {e}")
+
+    def json_to_deque(self, filepath):
+        if os.path.isfile(filepath) is False:
+            return None
+
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                return deque(data)
+        except (FileNotFoundError, json.JSONDecodeError, TypeError) as e:
+            print(f"Error: Failed to load json. {e}")
+            return None
+
     # CLI Interface
     def main(self):
         parser = argparse.ArgumentParser(
@@ -311,6 +335,9 @@ class Chat():
                             help="Specify the source for the prompt. "
                                  + "Can be a URL, a file path, "
                                  + "or a direct prompt text.")
+        parser.add_argument('--hist',
+                            '--history-file',
+                            help="Chat history file.")
         parser.add_argument('-i',
                             '--pdf-as-image',
                             action='store_true',
@@ -332,6 +359,16 @@ class Chat():
         self.grounding = args.grounding
 
         self.stdout = args.stdout
+
+        if args.hist is None:
+            self.conversation = deque()
+        else:
+            self.chat_history_file = args.hist
+            hist = self.json_to_deque(self.chat_history_file)
+            if hist is None:
+                self.conversation = deque()
+            else:
+                self.conversation = hist
 
         if sys.stdin.isatty():
             if args.sources is None or len(args.sources) == 0:
