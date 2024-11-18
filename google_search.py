@@ -1,4 +1,5 @@
 import argparse
+import json
 import os
 import requests
 import urllib.parse
@@ -102,7 +103,8 @@ def search(search_term):
             response.encoding = 'utf-8'
             search_results = response.json()
         else:
-            print(f"Failed to retrieve the web page: {response.status_code}")
+            json_str = json.dumps(response.json(), ensure_ascii=False, indent=2)
+            print(f"Failed to retrieve the web page: {json_str}")
             return False
 
         if 'items' not in search_results:

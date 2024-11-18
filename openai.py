@@ -86,7 +86,9 @@ class OPENAI(chat.Chat):
                 conversation.append(model_message)
 
         except Exception as e:
-            print(e)
+            print(f"ERROR:{e}")
+            json_str = json.dumps(response.json(), ensure_ascii=False, indent=2)
+            print(json_str)
             return None, None, None
         return content, usage, grounding_results
 
