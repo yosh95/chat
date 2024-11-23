@@ -15,15 +15,6 @@ This project provides a command-line interface (CLI) chat client that interacts 
 
 ## Requirements
 
-* Python 3.7+
-* `requests`
-* `filetype`
-* `beautifulsoup4`
-* `pypdf`
-* `dotenv`
-* `prompt_toolkit`
-* `google-api-python-client` (for Google Custom Search)
-
 Install the necessary packages using pip:
 
 ```bash

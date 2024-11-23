@@ -4,7 +4,6 @@ import os
 import requests
 import urllib.parse
 
-from dotenv import load_dotenv
 from prompt_toolkit.application import Application
 from prompt_toolkit.application.current import get_app
 from prompt_toolkit.key_binding.bindings.focus \
@@ -17,7 +16,6 @@ from prompt_toolkit.layout.containers import HSplit
 from prompt_toolkit.shortcuts import dialogs, prompt
 from prompt_toolkit.widgets import Button, Dialog, Label, RadioList
 
-load_dotenv()
 
 API_KEY = os.getenv("GOOGLE_API_KEY")
 if API_KEY is None:
