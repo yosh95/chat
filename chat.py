@@ -12,7 +12,6 @@ import webbrowser
 
 from bs4 import BeautifulSoup
 from collections import deque
-from dotenv import load_dotenv
 from io import BytesIO
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.history import InMemoryHistory
@@ -20,12 +19,9 @@ from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.shortcuts import prompt
 from pypdf import PdfReader
 
-# Read .env
-load_dotenv()
-
 # Constants
-INPUT_HISTORY = os.getenv("PROMPT_HISTORY", None)
-REQUEST_DEBUG_LOG = os.getenv("REQUEST_DEBUG_LOG", None)
+INPUT_HISTORY = os.getenv("CHAT_PROMPT_HISTORY", None)
+REQUEST_DEBUG_LOG = os.getenv("CHAT_REQUEST_DEBUG_LOG", None)
 PDF_AS_IMAGE = False
 
 # prompt_toolkit

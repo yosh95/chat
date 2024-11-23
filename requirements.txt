@@ -3,5 +3,4 @@ cryptography
 filetype
 prompt_toolkit
 pypdf
-python-dotenv
 requests
