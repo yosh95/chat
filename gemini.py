@@ -67,7 +67,10 @@ class Gemini(chat.Chat):
 
             self.write_request_debug_log(headers, data, response)
 
-            response.raise_for_status()
+            if response.status_code != 200:
+                json_str = json.dumps(response.json(), ensure_ascii=False, indent=2)
+                print(json_str)
+                return None, None, None
 
             result = response.json()
 
@@ -96,8 +99,6 @@ class Gemini(chat.Chat):
 
         except Exception as e:
             print(f"ERROR:{e}")
-            json_str = json.dumps(response.json(), ensure_ascii=False, indent=2)
-            print(json_str)
             return None, None, None
         return content, usage, grounding_results
 
