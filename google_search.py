@@ -132,8 +132,7 @@ def search(query):
 
             result = select_list(
                     'Search Results',
-                    f'Query: {query}\n' +
-                    'Please select one search result from the following:',
+                    f'{query}',
                     links, result)
 
             if result is None:
