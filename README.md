@@ -8,7 +8,7 @@ This project provides a command-line interface (CLI) chat client that interacts 
 * **File and URL Input:**  Allows providing input from various sources, including local files (text, PDF, images), and URLs.  PDFs can be processed as text or images (depending on settings).
 * **Interactive Chat:**  Provides a conversational interface for interacting with the chosen LLM.
 * **Conversation History:**  Maintains and displays a history of the conversation.
-* **Command-line Controls:**  Offers commands to clear the conversation history, view information about the session, quit, and open URLs in a web browser.
+* **Command-line Controls:**  Offers commands to clear the conversation history, view information about the session and quit.
 * **Google Custom Search Integration:** Integrates with Google Custom Search to allow for context-aware web searches during the chat session. This helps the LLM access relevant external information.
 * **Grounding (Gemini only):**  The Gemini integration allows the use of grounding, enabling the model to retrieve information from Google Search to answer your queries more accurately.  This is optional and controlled by an environment variable or command-line option.
 * **Request Logging:** Logs requests and responses to a file for debugging purposes.  This helps troubleshoot issues with API calls.
@@ -95,7 +95,6 @@ helper LLM.
 * `.h` or `.hist` or `.history`: Display the conversation history.
 * `.i` or `.info`: Display information about the current session (model, sources, etc.).
 * `.q` or `.quit`: Quit the chat session.
-* `.o` or `.open`: Open the first URL specified in the initial arguments in a web browser.
 
 **Keyboard Shortcuts (using `prompt_toolkit`):**
 

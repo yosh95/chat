@@ -8,7 +8,6 @@ import os
 import re
 import requests
 import sys
-import webbrowser
 
 from bs4 import BeautifulSoup
 from collections import deque
@@ -140,19 +139,6 @@ class Chat():
                 continue
             if user_input in ['.q', '.quit']:
                 break
-            if user_input in ['.o', '.open']:
-                if sources is not None and len(sources) > 0:
-                    url = sources[0]
-                    match = re.match(r"^(https?://)", url)
-                    if match:
-                        print(f"{url}")
-                        webbrowser.open(sources[0])
-                    else:
-                        print("Only URLs starting with http:// or https:// "
-                              + "can be processed.")
-                else:
-                    print("URL is not specified as an argument.")
-                continue
             if user_input in ['.g', '.grounding']:
                 if self.grounding is True:
                     self.grounding = False
