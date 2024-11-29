@@ -146,6 +146,9 @@ def search(query):
                 startIndex = nextIndex
                 break
 
+            selected_title = next((title for url,
+                                   title in links if url == result), None)
+            print(f"Title: {selected_title}")
             print(f"URL: {result}")
             search_helper.clear()
             if search_helper.process_sources([result]) is False:
