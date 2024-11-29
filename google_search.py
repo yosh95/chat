@@ -101,7 +101,8 @@ def search(query):
             search_results = response.json()
         else:
             json_str = json.dumps(response.json(), ensure_ascii=False, indent=2)
-            print(f"Failed to retrieve the web page: {json_str}")
+            print(f"Failed to retrieve the web page: {url}")
+            print(f"Response: {json_str}")
             return False
 
         if 'items' not in search_results:
