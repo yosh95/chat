@@ -1,5 +1,4 @@
 beautifulsoup4
-cryptography
 filetype
 prompt_toolkit
 pypdf
