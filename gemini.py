@@ -59,7 +59,7 @@ class Gemini(chat.Chat):
                 'contents': messages
             }
             if self.grounding is True:
-                data['tools'] = {'google_search_retrieval':{}}
+                data['tools'] = {'google_search':{}}
 
             response = requests.post(API_URL,
                                      headers=headers,
