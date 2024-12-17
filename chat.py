@@ -98,7 +98,7 @@ class Chat():
         while True:
 
             try:
-                print("----")
+                print("----------")
                 user_input = prompt('> ',
                                     history=prompt_history,
                                     key_bindings=kb,
@@ -106,7 +106,7 @@ class Chat():
                                     enable_system_prompt=True,
                                     enable_open_in_editor=True)
                 if user_input != '':
-                    print("----")
+                    print("----------")
                 user_input = user_input.strip()
             except UnicodeDecodeError as e:
                 print(e)
