@@ -253,6 +253,7 @@ class Chat():
                 })
 
         if direct_prompt is True:
+            print("----------")
             self.send_and_print(data)
             if self.stdout is False:
                 self.talk(None, sources=sources)
@@ -260,6 +261,7 @@ class Chat():
             if self.stdout is False:
                 self.talk(data, sources=sources)
             else:
+                print("----------")
                 self.send_and_print(data)
 
     def write_request_debug_log(self, headers, data, response):
