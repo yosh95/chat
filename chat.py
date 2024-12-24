@@ -35,10 +35,6 @@ class Chat():
 
     last_usage = None
 
-    grounding = False
-
-    grounding_results = None
-
     stdout = False
 
     conversation = deque()
@@ -56,7 +52,6 @@ class Chat():
 
     def clear(self):
         self.last_usage = None
-        self.grounding_results = None
         self.conversation.clear()
 
     def append_to_data(self, data, content, content_type=None):
@@ -79,7 +74,7 @@ class Chat():
         return sum
 
     def send_and_print(self, data):
-        response, self.last_usage, self.grounding_results = \
+        response, self.last_usage = \
             self._send(data, self.conversation)
         print(f"({self.MODEL}):\n{response}")
 
@@ -132,21 +127,9 @@ class Chat():
                 print(f"last usage: ", end="")
                 print(json.dumps(self.last_usage,
                                  indent=2, ensure_ascii=False))
-                print(f"grounding: {self.grounding}")
-                print(f"grounding results: ", end="")
-                print(json.dumps(self.grounding_results,
-                                 indent=2, ensure_ascii=False))
                 continue
             if user_input in ['.q', '.quit']:
                 break
-            if user_input in ['.g', '.grounding']:
-                if self.grounding is True:
-                    self.grounding = False
-                    print("Grounding is set to False.")
-                else:
-                    self.grounding = True
-                    print("Grounding is set to True.")
-                continue
             if user_input == '':
                 continue
             else:
@@ -326,10 +309,6 @@ class Chat():
                             '--pdf-as-image',
                             action='store_true',
                             help="Read pdf as image.")
-        parser.add_argument('-g',
-                            '--grounding',
-                            action='store_true',
-                            help="Use grounding.")
         parser.add_argument('-s',
                             '--stdout',
                             action='store_true',
@@ -339,8 +318,6 @@ class Chat():
         if args.pdf_as_image is True:
             global PDF_AS_IMAGE
             PDF_AS_IMAGE = True
-
-        self.grounding = args.grounding
 
         self.stdout = args.stdout
 

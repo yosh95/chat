@@ -49,7 +49,6 @@ class Gemini(chat.Chat):
             conversation.append(user_message)
 
         content = ''
-        grounding_results = None
         try:
             headers = {
                 'Content-Type': 'application/json',
@@ -58,8 +57,6 @@ class Gemini(chat.Chat):
             data = {
                 'contents': messages
             }
-            if self.grounding is True:
-                data['tools'] = {'google_search':{}}
 
             response = requests.post(API_URL,
                                      headers=headers,
@@ -82,10 +79,6 @@ class Gemini(chat.Chat):
                     print(content)
                 model_message = {"role": "model", "parts": [{"text": content}]}
 
-                if 'groundingMetadata' in result['candidates'][0]:
-                    metadata = result['candidates'][0]['groundingMetadata']
-                    if 'groundingChunks' in metadata:
-                        grounding_results = metadata['groundingChunks']
 
             else:
                 content = "ERROR: Failed to get contents in the response. " \
@@ -100,7 +93,7 @@ class Gemini(chat.Chat):
         except Exception as e:
             print(f"ERROR:{e}")
             return None, None, None
-        return content, usage, grounding_results
+        return content, usage
 
 
 # CLI Interface
