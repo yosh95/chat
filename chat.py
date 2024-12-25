@@ -93,7 +93,7 @@ class Chat():
         while True:
 
             try:
-                print("----------")
+                print("------------------------------")
                 user_input = prompt('> ',
                                     history=prompt_history,
                                     key_bindings=kb,
@@ -101,7 +101,7 @@ class Chat():
                                     enable_system_prompt=True,
                                     enable_open_in_editor=True)
                 if user_input != '':
-                    print("----------")
+                    print("------------------------------")
                 user_input = user_input.strip()
             except UnicodeDecodeError as e:
                 print(e)
@@ -236,15 +236,16 @@ class Chat():
                 })
 
         if direct_prompt is True:
-            print("----------")
+            if self.stdout is False:
+                print("------------------------------")
             self.send_and_print(data)
             if self.stdout is False:
                 self.talk(None, sources=sources)
+
         else:
             if self.stdout is False:
                 self.talk(data, sources=sources)
             else:
-                print("----------")
                 self.send_and_print(data)
 
     def write_request_debug_log(self, headers, data, response):
