@@ -15,6 +15,8 @@ from prompt_toolkit.layout import Layout
 from prompt_toolkit.layout.containers import HSplit
 from prompt_toolkit.shortcuts import dialogs, prompt
 from prompt_toolkit.widgets import Button, Dialog, Label, RadioList
+from rich.console import Console
+from rich.rule import Rule
 
 
 API_KEY = os.getenv("GOOGLE_API_KEY")
@@ -37,6 +39,9 @@ else:
     import gemini
     search_helper = gemini.Gemini(os.getenv("GEMINI_MODEL"))
 
+# rich
+console = Console()
+separator = Rule(style='bold yellow')
 
 def select_list(title, explanation, items, default):
 
@@ -149,8 +154,9 @@ def search(query):
 
             selected_title = next((title for url,
                                    title in links if url == result), None)
-            print(f"Title: {selected_title}")
-            print(f"URL: {result}")
+            console.print(separator)
+            console.print(selected_title)
+            console.print(result)
             search_helper.clear()
             if search_helper.process_sources([result]) is False:
                 prompt("Press the enter key to continue. ")
