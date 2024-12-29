@@ -17,6 +17,8 @@ from prompt_toolkit.history import InMemoryHistory
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.shortcuts import prompt
 from pypdf import PdfReader
+from rich.console import Console
+from rich.markdown import Markdown
 
 # Constants
 INPUT_HISTORY = os.getenv("CHAT_PROMPT_HISTORY", None)
@@ -76,7 +78,10 @@ class Chat():
     def send_and_print(self, data):
         response, self.last_usage = \
             self._send(data, self.conversation)
-        print(f"({self.MODEL}):\n{response}")
+        markdown = Markdown(response)
+        console = Console()
+        print(f"({self.MODEL}):")
+        console.print(markdown)
 
     def talk(self, data, sources=None):
 
