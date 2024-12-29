@@ -19,6 +19,7 @@ from prompt_toolkit.shortcuts import prompt
 from pypdf import PdfReader
 from rich.console import Console
 from rich.markdown import Markdown
+from rich.rule import Rule
 
 # Constants
 INPUT_HISTORY = os.getenv("CHAT_PROMPT_HISTORY", None)
@@ -30,7 +31,7 @@ kb = KeyBindings()
 
 # rich
 console = Console()
-md_separator = Markdown("----")
+md_separator = Rule(style='bold yellow')
 
 class Chat():
 
