@@ -28,6 +28,9 @@ PDF_AS_IMAGE = False
 # prompt_toolkit
 kb = KeyBindings()
 
+# rich
+console = Console()
+md_separator = Markdown("----")
 
 class Chat():
 
@@ -78,9 +81,9 @@ class Chat():
     def send_and_print(self, data):
         response, self.last_usage = \
             self._send(data, self.conversation)
+        markdown = Markdown(f"**({self.MODEL}):**")
+        console.print(markdown)
         markdown = Markdown(response)
-        console = Console()
-        print(f"({self.MODEL}):")
         console.print(markdown)
 
     def talk(self, data, sources=None):
@@ -98,7 +101,7 @@ class Chat():
         while True:
 
             try:
-                print("------------------------------")
+                console.print(md_separator)
                 user_input = prompt('> ',
                                     history=prompt_history,
                                     key_bindings=kb,
@@ -106,7 +109,7 @@ class Chat():
                                     enable_system_prompt=True,
                                     enable_open_in_editor=True)
                 if user_input != '':
-                    print("------------------------------")
+                    console.print(md_separator)
                 user_input = user_input.strip()
             except UnicodeDecodeError as e:
                 print(e)
@@ -242,7 +245,7 @@ class Chat():
 
         if direct_prompt is True:
             if self.stdout is False:
-                print("------------------------------")
+                console.print(md_separator)
             self.send_and_print(data)
             if self.stdout is False:
                 self.talk(None, sources=sources)
