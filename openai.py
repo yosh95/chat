@@ -73,7 +73,7 @@ class OPENAI(chat.Chat):
             if response.status_code != 200:
                 json_str = json.dumps(response.json(), ensure_ascii=False, indent=2)
                 print(json_str)
-                return None, None, None
+                return None, None
 
             result = response.json()
 
@@ -88,7 +88,7 @@ class OPENAI(chat.Chat):
 
         except Exception as e:
             print(f"ERROR:{e}")
-            return None, None, None
+            return None, None
         return content, usage
 
 
