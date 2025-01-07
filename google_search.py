@@ -156,7 +156,7 @@ def search(query):
                                    title in links if url == result), None)
             console.print(separator)
             console.print(selected_title)
-            console.print(result)
+            print(result)
             search_helper.clear()
             if search_helper.process_sources([result]) is False:
                 prompt("Press the enter key to continue. ")
