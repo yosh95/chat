@@ -1,0 +1,17 @@
+[project]
+name = "llm-cli"
+version = "0.1.0"
+description = "LLM API Client Tool"
+authors = [
+    {name = "Yoshihiro Ando",email = "yosh5295@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
