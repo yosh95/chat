@@ -20,8 +20,8 @@ from rich.markdown import Markdown
 from rich.rule import Rule
 
 # Constants
-INPUT_HISTORY = os.getenv("CHAT_PROMPT_HISTORY", None)
-REQUEST_DEBUG_LOG = os.getenv("CHAT_REQUEST_DEBUG_LOG", None)
+INPUT_HISTORY = os.getenv("LLM_PROMPT_HISTORY", None)
+REQUEST_DEBUG_LOG = os.getenv("LLM_REQUEST_DEBUG_LOG", None)
 PDF_AS_IMAGE = False
 
 # prompt_toolkit
@@ -35,7 +35,7 @@ class Chat():
 
     MODEL = ""
 
-    chat_history_file = None
+    llm_history_file = None
 
     last_usage = None
 
@@ -144,8 +144,8 @@ class Chat():
                 self.send_and_print(data)
             data = []
 
-        if self.chat_history_file is not None:
-            self.deque_to_json(self.conversation, self.chat_history_file)
+        if self.llm_history_file is not None:
+            self.deque_to_json(self.conversation, self.llm_history_file)
 
     def encode_data_from_file(self, file_path):
         with open(file_path, "rb") as data:
@@ -330,8 +330,8 @@ class Chat():
         self.stdout = args.stdout
 
         if args.hist is not None:
-            self.chat_history_file = args.hist
-            hist = self.json_to_deque(self.chat_history_file)
+            self.llm_history_file = args.hist
+            hist = self.json_to_deque(self.llm_history_file)
             if hist is not None:
                 self.conversation = hist
 

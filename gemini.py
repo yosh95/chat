@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import chat
+import llm_cli 
 import json
 import os
 import requests
@@ -16,7 +16,7 @@ if MODEL is None:
 API_URL = "https://generativelanguage.googleapis.com/v1beta/models/" \
            + MODEL + ":generateContent?key=" + API_KEY
 
-class Gemini(chat.Chat):
+class Gemini(llm_cli.Chat):
 
     def _send(self, data, conversation):
 

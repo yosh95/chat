@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import chat
+import llm_cli 
 import json
 import os
 import requests
@@ -16,7 +16,7 @@ if MODEL is None:
 API_URL = 'https://api.openai.com/v1/chat/completions'
 
 
-class OPENAI(chat.Chat):
+class OPENAI(llm_cli.Chat):
 
     def _send(self, data, conversation):
 

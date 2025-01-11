@@ -1,6 +1,6 @@
 # LLM Chat Client with Web Search Integration
 
-This project provides a command-line interface (CLI) chat client that interacts with various Large Language Models (LLMs) and integrates with Google Custom Search to enhance the conversation experience.  It supports OpenAI and Google Gemini APIs.
+This project provides a command-line interface (CLI) LLM client that interacts with various Large Language Models (LLMs) and integrates with Google Custom Search to enhance the conversation experience.  It supports OpenAI and Google Gemini APIs.
 
 ## Features
 
@@ -37,8 +37,8 @@ pip install -r requirements.txt
    export GOOGLE_API_KEY="your_google_custom_search_api_key"
    export GOOGLE_CSE_ID="your_google_custom_search_engine_id"
    export SEARCH_HELPER="openai" # or "gemini"
-   export PROMPT_HISTORY="$HOME/.chat_prompt_history"
-   export REQUEST_DEBUG_LOG="$HOME/.chat_request_debug_log"
+   export PROMPT_HISTORY="$HOME/.llm_prompt_history"
+   export REQUEST_DEBUG_LOG="$HOME/.llm_request_debug_log"
    ```
 
 3. **Run:** Execute the main script (you'll likely want to run `google_search.py`):
@@ -104,7 +104,7 @@ helper LLM.
 
 ## Extending to Other LLMs
 
-To add support for another LLM, create a new Python file (e.g., `new_llm.py`) and create a class that inherits from `chat.Chat`.  Implement the `_send()` method to handle sending requests and receiving responses from the new LLM's API.  Update the `.env` file with the necessary API keys and model names.
+To add support for another LLM, create a new Python file (e.g., `new_llm.py`) and create a class that inherits from `llm_cli.Chat`.  Implement the `_send()` method to handle sending requests and receiving responses from the new LLM's API.  Update the `.env` file with the necessary API keys and model names.
 
 
 ## Contributing

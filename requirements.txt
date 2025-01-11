@@ -1,6 +1,0 @@
-beautifulsoup4
-filetype
-prompt_toolkit
-pypdf
-requests
-rich
