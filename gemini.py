@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import llm_cli 
+import llm_cli
 import json
 import os
 import requests
@@ -15,6 +15,7 @@ if MODEL is None:
     exit(1)
 API_URL = "https://generativelanguage.googleapis.com/v1beta/models/" \
            + MODEL + ":generateContent?key=" + API_KEY
+
 
 class Gemini(llm_cli.Chat):
 
@@ -65,7 +66,9 @@ class Gemini(llm_cli.Chat):
             self.write_request_debug_log(headers, data, response)
 
             if response.status_code != 200:
-                json_str = json.dumps(response.json(), ensure_ascii=False, indent=2)
+                json_str = json.dumps(response.json(),
+                                      ensure_ascii=False,
+                                      indent=2)
                 print(json_str)
                 return None, None
 
@@ -78,7 +81,6 @@ class Gemini(llm_cli.Chat):
                 if content.startswith("'content'"):
                     print(content)
                 model_message = {"role": "model", "parts": [{"text": content}]}
-
 
             else:
                 content = "ERROR: Failed to get contents in the response. " \

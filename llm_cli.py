@@ -3,7 +3,6 @@ import base64
 import filetype
 import json
 import os
-import re
 import requests
 import sys
 
@@ -30,6 +29,7 @@ kb = KeyBindings()
 # rich
 console = Console()
 md_separator = Rule(style='bold yellow')
+
 
 class Chat():
 
@@ -131,7 +131,7 @@ class Chat():
                 print(f"model: {self.MODEL}")
                 print(f"sources: {sources}")
                 print(f"passed data size: {data_size}")
-                print(f"last usage: ", end="")
+                print("last usage: ", end="")
                 print(json.dumps(self.last_usage,
                                  indent=2, ensure_ascii=False))
                 continue

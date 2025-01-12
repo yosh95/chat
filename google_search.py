@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import requests
+import sys
 import urllib.parse
 
 from prompt_toolkit.application import Application
@@ -42,6 +43,12 @@ else:
 # rich
 console = Console()
 separator = Rule(style='bold yellow')
+
+
+def reset_terminal():
+    sys.stdout.write('\x1bc')
+    sys.stdout.flush()
+
 
 def select_list(title, explanation, items, default):
 
@@ -105,7 +112,9 @@ def search(query):
             response.encoding = 'utf-8'
             search_results = response.json()
         else:
-            json_str = json.dumps(response.json(), ensure_ascii=False, indent=2)
+            json_str = json.dumps(response.json(),
+                                  ensure_ascii=False,
+                                  indent=2)
             print(f"Failed to retrieve the web page: {url}")
             print(f"Response: {json_str}")
             return False
@@ -154,6 +163,8 @@ def search(query):
 
             selected_title = next((title for url,
                                    title in links if url == result), None)
+            input()
+            reset_terminal()
             console.print(separator)
             console.print(selected_title)
             print(result)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import llm_cli 
+import llm_cli
 import json
 import os
 import requests
@@ -71,7 +71,9 @@ class OPENAI(llm_cli.Chat):
             self.write_request_debug_log(headers, data, response)
 
             if response.status_code != 200:
-                json_str = json.dumps(response.json(), ensure_ascii=False, indent=2)
+                json_str = json.dumps(response.json(),
+                                      ensure_ascii=False,
+                                      indent=2)
                 print(json_str)
                 return None, None
 
