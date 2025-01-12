@@ -163,7 +163,6 @@ def search(query):
 
             selected_title = next((title for url,
                                    title in links if url == result), None)
-            input()
             reset_terminal()
             console.print(separator)
             console.print(selected_title)
