@@ -20,6 +20,7 @@ from rich.rule import Rule
 
 # Constants
 INPUT_HISTORY = os.getenv("LLM_PROMPT_HISTORY", None)
+LATEST_CHAT_LOG = os.getenv("LLM_LATEST_CHAT_LOG", None)
 REQUEST_DEBUG_LOG = os.getenv("LLM_REQUEST_DEBUG_LOG", None)
 PDF_AS_IMAGE = False
 
@@ -147,6 +148,8 @@ class Chat():
         if self.llm_history_file is not None:
             self.deque_to_json(self.conversation, self.llm_history_file)
 
+        self.write_latest_chat_log()
+
     def encode_data_from_file(self, file_path):
         with open(file_path, "rb") as data:
             return base64.b64encode(data.read()).decode('utf-8')
@@ -254,6 +257,15 @@ class Chat():
                 self.talk(data, sources=sources)
             else:
                 self.send_and_print(data)
+
+    def write_latest_chat_log(self):
+        if LATEST_CHAT_LOG is None:
+            return
+
+        with open(LATEST_CHAT_LOG, 'w', encoding='utf-8') as file:
+            jsonstr = json.dumps(list(self.conversation),
+                                 indent=2, ensure_ascii=False)
+            file.write(f'{jsonstr}\n')
 
     def write_request_debug_log(self, headers, data, response):
         if REQUEST_DEBUG_LOG is None:
