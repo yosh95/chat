@@ -263,9 +263,18 @@ class Chat():
             return
 
         with open(LATEST_CHAT_LOG, 'w', encoding='utf-8') as file:
-            jsonstr = json.dumps(list(self.conversation),
-                                 indent=2, ensure_ascii=False)
-            file.write(f'{jsonstr}\n')
+            console_log = Console(file=file)
+            for row in self.conversation:
+                if "role" in row and "parts" in row:
+                    role = row["role"]
+                    text = ""
+                    for part in row["parts"]:
+                        if "text" in part:
+                            text = part["text"]
+                    console_log.print(md_separator)
+                    console_log.print(f"({role})\n")
+                    markdown = Markdown(text)
+                    console_log.print(markdown)
 
     def write_request_debug_log(self, headers, data, response):
         if REQUEST_DEBUG_LOG is None:
