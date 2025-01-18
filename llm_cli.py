@@ -23,6 +23,7 @@ INPUT_HISTORY = os.getenv("LLM_PROMPT_HISTORY", None)
 LATEST_CHAT_LOG = os.getenv("LLM_LATEST_CHAT_LOG", None)
 REQUEST_DEBUG_LOG = os.getenv("LLM_REQUEST_DEBUG_LOG", None)
 PDF_AS_IMAGE = False
+PLAIN_TEXT = False
 
 # prompt_toolkit
 kb = KeyBindings()
@@ -81,10 +82,15 @@ class Chat():
     def send_and_print(self, data):
         response, self.last_usage = \
             self._send(data, self.conversation)
-        markdown = Markdown(f"**({self.MODEL}):**")
-        console.print(markdown)
-        markdown = Markdown(response)
-        console.print(markdown)
+        global PLAIN_TEXT
+        if PLAIN_TEXT is True:
+            print(f"({self.MODEL})")
+            print(response)
+        else:
+            markdown = Markdown(f"**({self.MODEL}):**")
+            console.print(markdown)
+            markdown = Markdown(response)
+            console.print(markdown)
 
     def talk(self, data, sources=None):
 
@@ -340,11 +346,19 @@ class Chat():
                             '--stdout',
                             action='store_true',
                             help="Redirect the output to STDOUT.")
+        parser.add_argument('-p',
+                            '--plain_text',
+                            action='store_true',
+                            help="Display plain text.")
         args = parser.parse_args()
 
         if args.pdf_as_image is True:
             global PDF_AS_IMAGE
             PDF_AS_IMAGE = True
+
+        if args.plain_text is True:
+            global PLAIN_TEXT
+            PLAIN_TEXT = True
 
         self.stdout = args.stdout
 
