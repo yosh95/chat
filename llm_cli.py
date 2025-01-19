@@ -150,6 +150,7 @@ class Chat():
                 if "role" in last_message and "parts" in last_message:
                     m = last_message["role"]
                     if len(last_message["parts"]) > 0:
+                        print("(PLAIN TEXT)")
                         for part in last_message["parts"]:
                             if "text" in part:
                                 print(part["text"])
