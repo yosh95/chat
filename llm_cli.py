@@ -151,6 +151,10 @@ class Chat():
                     m = last_message["role"]
                     if len(last_message["parts"]) > 0:
                         print("(PLAIN TEXT)")
+                        if last_message["role"] == "model":
+                            print(f"({self.MODEL}):")
+                        else:
+                            print(f"(m)")
                         for part in last_message["parts"]:
                             if "text" in part:
                                 print(part["text"])
