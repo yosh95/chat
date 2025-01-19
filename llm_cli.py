@@ -142,6 +142,20 @@ class Chat():
                 print(json.dumps(self.last_usage,
                                  indent=2, ensure_ascii=False))
                 continue
+            if user_input in ['.p', '.plain']:
+                if len(self.conversation) == 0:
+                    print("No conversation.")
+                    continue
+                last_message = self.conversation[-1]
+                if "role" in last_message and "parts" in last_message:
+                    m = last_message["role"]
+                    if len(last_message["parts"]) > 0:
+                        for part in last_message["parts"]:
+                            if "text" in part:
+                                print(part["text"])
+                else:
+                    print("Invalid conversation data.")
+                continue
             if user_input in ['.q', '.quit']:
                 break
             if user_input == '':
