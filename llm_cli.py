@@ -13,13 +13,17 @@ from prompt_toolkit.history import FileHistory
 from prompt_toolkit.history import InMemoryHistory
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.shortcuts import prompt
+from pypdf import PdfReader
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.rule import Rule
 
 # Constants
 INPUT_HISTORY = os.getenv("LLM_PROMPT_HISTORY", None)
+LATEST_CHAT_LOG = os.getenv("LLM_LATEST_CHAT_LOG", None)
 REQUEST_DEBUG_LOG = os.getenv("LLM_REQUEST_DEBUG_LOG", None)
+PDF_AS_IMAGE = False
+PLAIN_TEXT = False
 
 # prompt_toolkit
 kb = KeyBindings()
@@ -78,10 +82,15 @@ class Chat():
     def send_and_print(self, data):
         response, self.last_usage = \
             self._send(data, self.conversation)
-        markdown = Markdown(f"**({self.MODEL}):**")
-        console.print(markdown)
-        markdown = Markdown(response)
-        console.print(markdown)
+        global PLAIN_TEXT
+        if PLAIN_TEXT is True:
+            print(f"({self.MODEL})")
+            print(response)
+        else:
+            markdown = Markdown(f"**({self.MODEL}):**")
+            console.print(markdown)
+            markdown = Markdown(response)
+            console.print(markdown)
 
     def talk(self, data, sources=None):
 
@@ -163,9 +172,29 @@ class Chat():
         if self.llm_history_file is not None:
             self.deque_to_json(self.conversation, self.llm_history_file)
 
+        self.write_latest_chat_log()
+
     def encode_data_from_file(self, file_path):
         with open(file_path, "rb") as data:
             return base64.b64encode(data.read()).decode('utf-8')
+
+    def read_pdf_from_file(self, file_name):
+        reader = PdfReader(file_name)
+        text = ''
+        for page in reader.pages:
+            text += '\n' + page.extract_text()
+        if text != '':
+            return text
+        else:
+            print("Empty PDF.")
+            return None
+
+    def read_pdf_from_byte_stream(self, byte_stream):
+        reader = PdfReader(byte_stream)
+        text = ''
+        for page in reader.pages:
+            text += '\n' + page.extract_text()
+        return text
 
     def read_text_from_file(self, file_name):
         text = ''
@@ -189,8 +218,12 @@ class Chat():
         content = response.content
 
         if 'application/pdf' in content_type:
-            return base64.b64encode(
-                BytesIO(content).read()).decode('utf-8'), content_type
+            if PDF_AS_IMAGE is True:
+                return base64.b64encode(
+                    BytesIO(content).read()).decode('utf-8'), content_type
+            else:
+                return self.read_pdf_from_byte_stream(BytesIO(content)), \
+                        'text/plain'
         elif 'text/html' in content_type:
             soup = BeautifulSoup(content, 'html.parser')
             return soup.get_text(' ', strip=True), content_type
@@ -214,8 +247,12 @@ class Chat():
                 content_type = None
                 kind = filetype.guess(source)
                 if kind and kind.extension == 'pdf':
-                    content = self.encode_data_from_file(source)
-                    content_type = "application/pdf"
+                    if PDF_AS_IMAGE is True:
+                        content = self.encode_data_from_file(source)
+                        content_type = "application/pdf"
+                    else:
+                        content = self.read_pdf_from_file(source)
+                        content_type = "text/plain"
                 elif kind and 'image/' in kind.mime:
                     content = self.encode_data_from_file(source)
                     content_type = kind.mime
@@ -244,6 +281,22 @@ class Chat():
                 self.talk(data, sources=sources)
             else:
                 self.send_and_print(data)
+
+    def write_latest_chat_log(self):
+        if LATEST_CHAT_LOG is None:
+            return
+
+        with open(LATEST_CHAT_LOG, 'w', encoding='utf-8') as file:
+            for row in self.conversation:
+                if "role" in row and "parts" in row:
+                    role = row["role"]
+                    text = ""
+                    for part in row["parts"]:
+                        if "text" in part:
+                            text = part["text"]
+                    file.write(f"**({role})**\n")
+                    file.write(text)
+                    file.write("\n\n")
 
     def write_request_debug_log(self, headers, data, response):
         if REQUEST_DEBUG_LOG is None:
@@ -303,11 +356,27 @@ class Chat():
         parser.add_argument('--hist',
                             '--history-file',
                             help="Chat history file.")
+        parser.add_argument('-i',
+                            '--pdf-as-image',
+                            action='store_true',
+                            help="Read pdf as image.")
         parser.add_argument('-s',
                             '--stdout',
                             action='store_true',
                             help="Redirect the output to STDOUT.")
+        parser.add_argument('-p',
+                            '--plain_text',
+                            action='store_true',
+                            help="Display plain text.")
         args = parser.parse_args()
+
+        if args.pdf_as_image is True:
+            global PDF_AS_IMAGE
+            PDF_AS_IMAGE = True
+
+        if args.plain_text is True:
+            global PLAIN_TEXT
+            PLAIN_TEXT = True
 
         self.stdout = args.stdout
 
