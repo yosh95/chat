@@ -146,19 +146,20 @@ class Chat():
                 if len(self.conversation) == 0:
                     print("No conversation.")
                     continue
-                last_message = self.conversation[-1]
-                if "role" in last_message and "parts" in last_message:
-                    if len(last_message["parts"]) > 0:
-                        print("(PLAIN TEXT)")
-                        if last_message["role"] == "model":
-                            print(f"({self.MODEL}):")
-                        else:
-                            print(f"({last_message['role']})")
-                        for part in last_message["parts"]:
-                            if "text" in part:
-                                print(part["text"])
-                else:
-                    print("Invalid conversation data.")
+                print("(PLAIN TEXT)")
+                for msg in self.conversation:
+                    print("---------")
+                    if "role" in msg and "parts" in msg:
+                        if len(msg["parts"]) > 0:
+                            if msg["role"] == "model":
+                                print(f"({self.MODEL}):")
+                            else:
+                                print(f"({msg['role']}):")
+                            for part in msg["parts"]:
+                                if "text" in part:
+                                    print(part["text"])
+                    else:
+                        print("Invalid conversation data.")
                 continue
             if user_input in ['.q', '.quit']:
                 break
