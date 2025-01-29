@@ -15,6 +15,7 @@ if MODEL is None:
     exit(1)
 API_URL = 'https://api.openai.com/v1/chat/completions'
 
+session = requests.Session()
 
 class OPENAI(llm_cli.Chat):
 
@@ -64,9 +65,9 @@ class OPENAI(llm_cli.Chat):
 
             content = ''
 
-            response = requests.post(API_URL,
-                                     headers=headers,
-                                     data=json.dumps(data))
+            response = session.post(API_URL,
+                                    headers=headers,
+                                    data=json.dumps(data))
 
             self.write_request_debug_log(headers, data, response)
 

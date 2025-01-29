@@ -32,6 +32,8 @@ kb = KeyBindings()
 console = Console()
 md_separator = Rule(style='bold yellow')
 
+# session
+session = requests.Session()
 
 class Chat():
 
@@ -206,9 +208,9 @@ class Chat():
     def fetch_url_content(self, url):
         headers = {}
         try:
-            response = requests.get(url,
-                                    headers=headers,
-                                    timeout=(10.0, 10.0))
+            response = session.get(url,
+                                   headers=headers,
+                                   timeout=(10.0, 10.0))
             response.raise_for_status()
         except Exception as e:
             print(e)
