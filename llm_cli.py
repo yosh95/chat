@@ -85,7 +85,7 @@ class Chat():
         response, self.last_usage = \
             self._send(data, self.conversation)
         if response is None:
-            print("The response is None.")
+            print("Oops! Something went wrong.")
             return
 
         global PLAIN_TEXT
