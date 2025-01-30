@@ -84,6 +84,10 @@ class Chat():
     def send_and_print(self, data):
         response, self.last_usage = \
             self._send(data, self.conversation)
+        if response is None:
+            print("The response is None.")
+            return
+
         global PLAIN_TEXT
         if PLAIN_TEXT is True:
             print(f"({self.MODEL})")
