@@ -9,7 +9,6 @@ API_KEY = os.getenv("GEMINI_API_KEY")
 if API_KEY is None:
     print("GEMINI_API_KEY environment variable must be set.")
     exit(1)
-MODEL = os.getenv("GEMINI_MODEL")
 API_URL = "https://generativelanguage.googleapis.com/v1beta/models" \
           + "?key=" + API_KEY
 
