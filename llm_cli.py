@@ -20,7 +20,7 @@ from rich.rule import Rule
 
 # Constants
 INPUT_HISTORY = os.getenv("LLM_PROMPT_HISTORY", None)
-LATEST_CHAT_LOG = os.getenv("LLM_LATEST_CHAT_LOG", None)
+CHAT_LOG = os.getenv("LLM_CHAT_LOG", None)
 REQUEST_DEBUG_LOG = os.getenv("LLM_REQUEST_DEBUG_LOG", None)
 PDF_AS_IMAGE = False
 PLAIN_TEXT = False
@@ -179,7 +179,7 @@ class Chat():
         if self.llm_history_file is not None:
             self.deque_to_json(self.conversation, self.llm_history_file)
 
-        self.write_latest_chat_log()
+        self.write_chat_log()
 
     def encode_data_from_file(self, file_path):
         with open(file_path, "rb") as data:
@@ -289,11 +289,11 @@ class Chat():
             else:
                 self.send_and_print(data)
 
-    def write_latest_chat_log(self):
-        if LATEST_CHAT_LOG is None:
+    def write_chat_log(self):
+        if CHAT_LOG is None:
             return
 
-        with open(LATEST_CHAT_LOG, 'w', encoding='utf-8') as file:
+        with open(CHAT_LOG, 'a', encoding='utf-8') as file:
             for row in self.conversation:
                 if "role" in row and "parts" in row:
                     role = row["role"]
