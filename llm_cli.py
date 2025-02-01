@@ -180,8 +180,6 @@ class Chat():
         if self.llm_history_file is not None:
             self.deque_to_json(self.conversation, self.llm_history_file)
 
-        self.write_chat_log()
-
     def encode_data_from_file(self, file_path):
         with open(file_path, "rb") as data:
             return base64.b64encode(data.read()).decode('utf-8')
@@ -290,21 +288,21 @@ class Chat():
             else:
                 self.send_and_print(data)
 
-    def write_chat_log(self):
+    def write_chat_log(self, message):
         if CHAT_LOG is None:
             return
 
         with open(CHAT_LOG, 'a', encoding='utf-8') as file:
-            for row in self.conversation:
-                if "role" in row and "parts" in row:
-                    role = row["role"]
-                    text = ""
-                    for part in row["parts"]:
-                        if "text" in part:
-                            text = part["text"]
-                    file.write(f"**({role})**\n")
-                    file.write(text)
-                    file.write("\n\n")
+            if "role" in message and "parts" in message:
+                file.write("----------\n")
+                role = message["role"]
+                text = ""
+                for part in message["parts"]:
+                    if "text" in part:
+                        text = part["text"]
+                file.write(f"({role}):\n")
+                file.write(text)
+                file.write("\n")
 
     def write_request_debug_log(self, headers, data, response):
         if REQUEST_DEBUG_LOG is None:

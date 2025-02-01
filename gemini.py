@@ -48,6 +48,7 @@ class Gemini(llm_cli.Chat):
                 })
 
         messages.append(user_message)
+        self.write_chat_log(user_message)
         if conversation is not None:
             conversation.append(user_message)
 
@@ -91,6 +92,7 @@ class Gemini(llm_cli.Chat):
 
             usage = result['usageMetadata']
 
+            self.write_chat_log(model_message)
             if conversation is not None:
                 conversation.append(model_message)
 
