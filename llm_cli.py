@@ -35,6 +35,7 @@ md_separator = Rule(style='bold yellow')
 # session
 session = requests.Session()
 
+
 class Chat():
 
     MODEL = ""

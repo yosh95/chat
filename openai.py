@@ -17,6 +17,7 @@ API_URL = 'https://api.openai.com/v1/chat/completions'
 
 session = requests.Session()
 
+
 class OPENAI(llm_cli.Chat):
 
     def _send(self, data, conversation):

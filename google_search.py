@@ -46,6 +46,7 @@ separator = Rule(style='bold yellow')
 
 session = requests.Session()
 
+
 def reset_terminal():
     sys.stdout.write('\x1bc')
     sys.stdout.flush()

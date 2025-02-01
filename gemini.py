@@ -18,6 +18,7 @@ API_URL = "https://generativelanguage.googleapis.com/v1beta/models/" \
 
 session = requests.Session()
 
+
 class Gemini(llm_cli.Chat):
 
     def _send(self, data, conversation):
