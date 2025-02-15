@@ -42,7 +42,7 @@ else:
 
 # rich
 console = Console()
-separator = Rule(style='bold yellow')
+separator = Rule()
 
 session = requests.Session()
 

@@ -30,7 +30,7 @@ kb = KeyBindings()
 
 # rich
 console = Console()
-md_separator = Rule(style='bold yellow')
+md_separator = Rule()
 
 # session
 session = requests.Session()
