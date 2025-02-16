@@ -44,8 +44,6 @@ else:
 console = Console()
 separator = Rule()
 
-session = requests.Session()
-
 
 def reset_terminal():
     sys.stdout.write('\x1bc')
@@ -107,7 +105,7 @@ def search(query):
     while True:
 
         url = base_url + f"&start={startIndex}"
-        response = session.get(url, headers=headers, timeout=(10.0, 10.0))
+        response = requests.get(url, headers=headers, timeout=(10.0, 10.0))
 
         search_results = {}
         if response.status_code == 200:

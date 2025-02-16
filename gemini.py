@@ -16,8 +16,6 @@ if MODEL is None:
 API_URL = "https://generativelanguage.googleapis.com/v1beta/models/" \
            + MODEL + ":generateContent?key=" + API_KEY
 
-session = requests.Session()
-
 
 class Gemini(llm_cli.Chat):
 
@@ -62,9 +60,9 @@ class Gemini(llm_cli.Chat):
                 'contents': messages
             }
 
-            response = session.post(API_URL,
-                                    headers=headers,
-                                    data=json.dumps(data))
+            response = requests.post(API_URL,
+                                     headers=headers,
+                                     data=json.dumps(data))
 
             self.write_request_debug_log(headers, data, response)
 
