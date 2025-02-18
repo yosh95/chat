@@ -288,16 +288,12 @@ class Chat():
                 content_type = "text/plain"
 
             if file_url is not None:
-                print(1)
-                print(file_url)
                 data.append({
                     "content_type": content_type,
                     "file_url": file_url,
                     "file_size": file_size,
                 })
             elif content is not None:
-                print(2)
-                print(content)
                 data.append({
                     "content": content,
                     "content_type": content_type
