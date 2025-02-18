@@ -63,15 +63,21 @@ class Chat():
         self.last_usage = None
         self.conversation.clear()
 
-    def append_to_data(self, data, content, content_type=None):
+    def append_to_data(self, data, content, content_type=None, file_url=None):
         if data is None:
             data = []
         if content_type is None:
             content_type = "text/plain"
-        data.append({
-            "content": content,
-            "content_type": content_type
-        })
+        if file_url is None:
+            data.append({
+                "content": content,
+                "content_type": content_type
+            })
+        else:
+            data.append({
+                "content_type": content_type,
+                "file_url": file_url
+            })
         return data
 
     def calc_data_size(self, data):
@@ -79,7 +85,10 @@ class Chat():
         if data is None:
             return 0
         for i in data:
-            sum += len(i['content'])
+            if 'content' in i:
+                sum += len(i['content'])
+            elif 'file_size' in i:
+                sum += i['file_size']
         return sum
 
     def send_and_print(self, data):
@@ -246,6 +255,8 @@ class Chat():
         data = []
         direct_prompt = True
         for source in sources:
+            file_url = None
+            file_size = 0
             if source.startswith("http"):
                 content, content_type = self.fetch_url_content(source)
                 direct_prompt = False
@@ -263,6 +274,12 @@ class Chat():
                                'audio/' in kind.mime):
                     content = self.encode_data_from_file(source)
                     content_type = kind.mime
+                elif kind and ('video/' in kind.mime):
+                    file_url, file_size = self._upload_file(source)
+                    if file_url is None:
+                        print("Error: failed to upload {source}")
+                        continue
+                    content_type = kind.mime
                 else:
                     content = self.read_text_from_file(source)
                 direct_prompt = False
@@ -270,7 +287,17 @@ class Chat():
                 content = source
                 content_type = "text/plain"
 
-            if content is not None:
+            if file_url is not None:
+                print(1)
+                print(file_url)
+                data.append({
+                    "content_type": content_type,
+                    "file_url": file_url,
+                    "file_size": file_size,
+                })
+            elif content is not None:
+                print(2)
+                print(content)
                 data.append({
                     "content": content,
                     "content_type": content_type
