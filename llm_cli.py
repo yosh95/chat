@@ -259,7 +259,8 @@ class Chat():
                     else:
                         content = self.read_pdf_from_file(source)
                         content_type = "text/plain"
-                elif kind and 'image/' in kind.mime:
+                elif kind and ('image/' in kind.mime or
+                               'audio/' in kind.mime):
                     content = self.encode_data_from_file(source)
                     content_type = kind.mime
                 else:
