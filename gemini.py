@@ -64,6 +64,7 @@ class Gemini(llm_cli.Chat):
             conversation.append(user_message)
 
         content = ''
+        grounding_chunks = None
         try:
             headers = {
                 'Content-Type': 'application/json',
@@ -72,6 +73,9 @@ class Gemini(llm_cli.Chat):
             data = {
                 'contents': messages
             }
+
+            if self.grounding is True:
+                data['tools'] = [{'google_search': {}}]
 
             response = requests.post(API_URL,
                                      headers=headers,
@@ -84,7 +88,7 @@ class Gemini(llm_cli.Chat):
                                       ensure_ascii=False,
                                       indent=2)
                 print(json_str)
-                return None, None
+                return None, None, None
 
             result = response.json()
 
@@ -95,6 +99,11 @@ class Gemini(llm_cli.Chat):
                 if content.startswith("'content'"):
                     print(content)
                 model_message = {"role": "model", "parts": [{"text": content}]}
+
+                if 'groundingMetadata' in result['candidates'][0]:
+                    gr_metadata = result['candidates'][0]['groundingMetadata']
+                    if 'groundingChunks' in gr_metadata:
+                        grounding_chunks = gr_metadata['groundingChunks']
 
             else:
                 content = "ERROR: Failed to get contents in the response. " \
@@ -109,8 +118,8 @@ class Gemini(llm_cli.Chat):
 
         except Exception as e:
             print(f"ERROR:{e}")
-            return None, None
-        return content, usage
+            return None, None, None
+        return content, usage, grounding_chunks
 
     def _upload_file(self, path):
 

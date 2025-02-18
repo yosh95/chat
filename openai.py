@@ -75,7 +75,7 @@ class OPENAI(llm_cli.Chat):
                                       ensure_ascii=False,
                                       indent=2)
                 print(json_str)
-                return None, None
+                return None, None, None
 
             result = response.json()
 
@@ -90,8 +90,8 @@ class OPENAI(llm_cli.Chat):
 
         except Exception as e:
             print(f"ERROR:{e}")
-            return None, None
-        return content, usage
+            return None, None, None
+        return content, usage, None
 
 
 if __name__ == "__main__":

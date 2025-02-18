@@ -46,6 +46,8 @@ class Chat():
 
     stdout = False
 
+    grounding = False
+
     conversation = deque()
 
     def __init__(self, model):
@@ -92,7 +94,7 @@ class Chat():
         return sum
 
     def send_and_print(self, data):
-        response, self.last_usage = \
+        response, self.last_usage, self.grounding = \
             self._send(data, self.conversation)
         if response is None:
             print("Oops! Something went wrong.")
@@ -157,6 +159,10 @@ class Chat():
                 print("last usage: ", end="")
                 print(json.dumps(self.last_usage,
                                  indent=2, ensure_ascii=False))
+                if self.grounding is not None:
+                    print("grounding: ", end="")
+                    print(json.dumps(self.grounding,
+                                     indent=2, ensure_ascii=False))
                 continue
             if user_input in ['.p', '.plain']:
                 if len(self.conversation) == 0:
@@ -383,6 +389,10 @@ class Chat():
                             help="Specify the source for the prompt. "
                                  + "Can be a URL, a file path, "
                                  + "or a direct prompt text.")
+        parser.add_argument('-g',
+                            '--grounding',
+                            action='store_true',
+                            help="Use grounding function of API.")
         parser.add_argument('--hist',
                             '--history-file',
                             help="Chat history file.")
@@ -390,15 +400,17 @@ class Chat():
                             '--pdf-as-image',
                             action='store_true',
                             help="Read pdf as image.")
-        parser.add_argument('-s',
-                            '--stdout',
-                            action='store_true',
-                            help="Redirect the output to STDOUT.")
         parser.add_argument('-p',
                             '--plain_text',
                             action='store_true',
                             help="Display plain text.")
+        parser.add_argument('-s',
+                            '--stdout',
+                            action='store_true',
+                            help="Redirect the output to STDOUT.")
         args = parser.parse_args()
+
+        self.grounding = args.grounding
 
         if args.pdf_as_image is True:
             global PDF_AS_IMAGE
